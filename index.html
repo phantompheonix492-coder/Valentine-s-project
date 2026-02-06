@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Be My Valentine 💖</title>
+
+<style>
+body {
+  height: 100vh;
+  margin: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: #ffe6eb;
+  font-family: Arial, sans-serif;
+  overflow: hidden;
+}
+
+.card {
+  background: white;
+  padding: 40px;
+  border-radius: 26px;
+  text-align: center;
+  width: 95%;
+  max-width: 480px;
+  box-shadow: 0 14px 35px rgba(0,0,0,0.3);
+  position: relative;
+}
+
+h1 {
+  color: #ff4d6d;
+  margin-bottom: 15px;
+  font-size: 30px;
+}
+
+#emoji {
+  font-size: 110px;
+  margin: 20px 0;
+}
+
+button {
+  padding: 18px 34px;
+  font-size: 22px;
+  border: none;
+  border-radius: 16px;
+  cursor: pointer;
+  margin: 10px;
+  transition: all 0.3s ease;
+}
+
+#yesBtn {
+  background: #ff4d6d;
+  color: white;
+}
+
+#noBtn {
+  background: #ddd;
+}
+
+.hidden {
+  display: none;
+}
+
+.gift {
+  font-size: 90px;
+  cursor: pointer;
+}
+
+.flowers {
+  font-size: 50px;
+  margin: 20px 0;
+}
+
+/* Confetti */
+.confetti {
+  position: absolute;
+  top: -10px;
+  width: 10px;
+  height: 10px;
+  background: red;
+  animation: fall 3s linear infinite;
+}
+
+@keyframes fall {
+  0% { transform: translateY(0) rotate(0deg); }
+  100% { transform: translateY(700px) rotate(360deg); }
+}
+</style>
+</head>
+
+<body>
+
+<div class="card" id="card">
+  <h1 id="question">Will you be my Valentine? 💖</h1>
+  <div id="emoji">🙂</div>
+
+  <div id="buttons">
+    <button id="yesBtn">Yes ❤️</button>
+    <button id="noBtn">No 💔</button>
+  </div>
+
+  <!-- Gift stage -->
+  <div id="giftStage" class="hidden">
+    <h1>Here’s something for you 🎁</h1>
+    <div id="giftBox" class="gift">🎁</div>
+  </div>
+
+  <!-- Flowers stage -->
+  <div id="flowersStage" class="hidden">
+    <h1>Just for you 💖</h1>
+    <div class="flowers">💐🌸🌹🌷💐</div>
+    <h1>I Love You ❤️</h1>
+  </div>
+</div>
+
+<script>
+const noMessages = [
+  "Are you sure? 🥺",
+  "Really sure? 😢",
+  "I’ll be very sad…",
+  "Please don’t 😭",
+  "Okay last chance 😭"
+];
+
+const sadEmojis = ["😕", "😢", "😭", "😭", "😭"];
+
+let clicks = 0;
+let noScale = 1;
+
+const yesBtn = document.getElementById("yesBtn");
+const noBtn = document.getElementById("noBtn");
+const emoji = document.getElementById("emoji");
+const buttons = document.getElementById("buttons");
+const giftStage = document.getElementById("giftStage");
+const flowersStage = document.getElementById("flowersStage");
+const card = document.getElementById("card");
+
+noBtn.onclick = () => {
+  clicks++;
+  noBtn.textContent = noMessages[Math.min(clicks - 1, noMessages.length - 1)];
+  emoji.textContent = sadEmojis[Math.min(clicks - 1, sadEmojis.length - 1)];
+
+  let yesSize = parseFloat(getComputedStyle(yesBtn).fontSize);
+  yesBtn.style.fontSize = (yesSize + 20) + "px";
+
+  noScale -= 0.15;
+  noBtn.style.transform = `scale(${noScale})`;
+
+  if (clicks >= 5) {
+    noBtn.style.display = "none";
+    yesBtn.style.fontSize = "56px";
+  }
+};
+
+yesBtn.onclick = () => {
+  document.getElementById("question").textContent = "Thank you for picking yes❤️🥰";
+  emoji.textContent = "😄💖😄";
+  buttons.style.display = "none";
+  giftStage.classList.remove("hidden");
+};
+
+document.getElementById("giftBox").onclick = () => {
+  giftStage.classList.add("hidden");
+  flowersStage.classList.remove("hidden");
+  startConfetti();
+};
+
+function startConfetti() {
+  for (let i = 0; i < 30; i++) {
+    const confetti = document.createElement("div");
+    confetti.classList.add("confetti");
+    confetti.style.left = Math.random() * 100 + "%";
+    confetti.style.background = 
+      ["#ff4d6d","#ffd166","#06d6a0","#118ab2","#ef476f"]
+      [Math.floor(Math.random() * 5)];
+    confetti.style.animationDuration = (Math.random() * 2 + 2) + "s";
+    card.appendChild(confetti);
+
+    setTimeout(() => confetti.remove(), 3000);
+  }
+}
+</script>
+
+</body>
+</html>
